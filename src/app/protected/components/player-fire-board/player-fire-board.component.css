@@ -1,0 +1,10 @@
+.display-board-player-ships {
+    width: 350px;
+    height: 100%;
+}
+
+.display-title {
+    min-width: 200px;
+    height: 16px;
+    padding: 8px;
+}
