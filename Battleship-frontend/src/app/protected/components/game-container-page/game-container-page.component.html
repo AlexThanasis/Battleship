@@ -1,0 +1,19 @@
+<div class="game-container">
+    <div class="upper-row">
+        <p>Torpedo Game</p>
+    </div>
+    <div class="middle-row">
+        <div class="display-head-title">
+            Display
+        </div>
+        <div class="displays">
+            <div class="display-container">
+                <player-ships-board [gameBoard]="mockedShipsOfPlayer"></player-ships-board>
+            </div>
+            <div class="display-container">
+                <player-fire-board  [gameBoard]="mockedShipsOfOpponent"></player-fire-board>
+            </div>
+        </div>
+    </div>
+</div>
+

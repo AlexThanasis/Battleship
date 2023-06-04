@@ -1,0 +1,5 @@
+<div class="rows" *ngFor="let row of rows; index as i">
+    <div (click)="fire($event)" class="cell" [ngClass]="[isPosShip(i, j) ? 'ship': 'water']" *ngFor="let cell of row; index as j" [attr.row-index]="i" [attr.cell-index]="j">
+        <span [ngClass]="[isPosShip(i, j) ? 'ship': 'water']"></span>
+    </div>
+</div>
