@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { GameService } from '../../services/game.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -6,5 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./landing-page.component.css']
 })
 export class LandingPageComponent {
+  @Output() phaseClose: EventEmitter<any> = new EventEmitter();
+  getOpponent = () => {
+    this.phaseClose.emit(true);
+    this.gameServive.getOppenent()
+  }
 
+  constructor(private gameServive: GameService) {}
 }

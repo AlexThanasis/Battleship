@@ -8,3 +8,36 @@
     height: 16px;
     padding: 8px;
 }
+
+.cell {
+    background-color: white;
+    min-width: 30px;
+    min-height: 30px;
+    border: 1px solid whitesmoke;
+    cursor: crosshair;
+    border-radius: 4px;
+}
+
+.cell-inner {
+    
+}
+
+.rows {
+    display: flex;
+}
+
+.table {
+    width: 300px;
+}
+
+.hit {
+    background-color: red;
+}
+
+.water {
+    background-color: blue;
+}
+
+.unknown {
+    background-color: grey;
+}

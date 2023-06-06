@@ -1,5 +1,17 @@
 <div class="display-board-player-ships">
     <div class="diplay-title">Enemy fleet</div>
-    <app-table [gameBoard]="gameBoard" (selectedPosition)="fireOnSelectedPosition($event)"></app-table>
+    <div>
+        <div class="rows" *ngFor="let row of rows; index as i">
+            <div 
+                (click)="fire($event)" 
+                class="cell" 
+                [ngClass]="[handleBackground(cell.elementType)]" 
+                *ngFor="let cell of row; index as j" 
+                [attr.row-index]="i" 
+                [attr.cell-index]="j">
+            </div>
+        </div>
+    </div>
+
 </div>
 

@@ -1,4 +1,9 @@
 <div class="display-board-player-ships">
     <div class="diplay-title">Player's ships</div>
-    <app-table [gameBoard]="gameBoard"></app-table>
+    <div>
+        <div class="rows" *ngFor="let row of gameBoard; index as i">
+            <div class="cell" [ngClass]="[cell.elementType === 'ship' ? 'ship': 'water']" *ngFor="let cell of row; index as j" [attr.row-index]="i" [attr.cell-index]="j">
+            </div>
+        </div>
+    </div>
 </div>

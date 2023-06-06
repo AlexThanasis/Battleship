@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Player } from 'src/app/protected/models/player';
 
-import { Carrier, Battleship, Destroyer, Submarine, PatrolBoat } from "../../models/ship";
+import { Carrier, Battleship, Destroyer, Submarine, PatrolBoat, Ship } from "../../models/ship";
+import { TypeOfPlayerBoardElement, TypeOfOpponentBoardElement } from "../../models/TypeOfObject";
 import { Observable, map, catchError, tap } from 'rxjs';
-import { ShipPosition } from 'src/app/protected/models/position';
+import { OpponentGameBoardPosition, PlayerGameBoardPosition, ShipPosition, Position } from 'src/app/protected/models/position';
 
 @Component({
   selector: 'game-container-page',
@@ -13,17 +14,84 @@ import { ShipPosition } from 'src/app/protected/models/position';
 export class GameContainerPageComponent implements OnInit {
   player: Player | null = null;
   opponent: Player | null = null;
+  selectedPosition: any | Position;
 
-  // liveData$ = this.service.messages$.pipe(
-  //   map(rows => rows.data),
-  //   catchError(error => { throw error }),
-  //   tap(
-  //     {
-  //       error: error => console.log('[Live component] Error:', error),
-  //       complete: () => console.log('[Live component] Connection Closed')
-  //     }
-  //   )
-  // );
+  playerBoard: any = [];
+  opponentBoard: any = [];
+    
+  fireOnSelectedPosition(position: Position): void {
+    console.log("Fire on position: ", position.getXPos(), position.getYPos());
+    this.selectedPosition = position;
+    this.updateOpponentBoard();
+  }
+
+  isPosShip(shipPositions: any, i: number, j: number): boolean {
+    console.log(shipPositions.length)
+    return shipPositions.filter((sp: Position) => sp.getXPos() === i && sp.getYPos() === j).length > 0;
+  }
+
+  createPlayerBoard = (length = 10) => {
+    if (!this.mockedShipsOfPlayer) {
+      return;
+    }
+
+    const rowsTotal = length;
+    const cellsInRowTotal = length;
+
+    // const shipPositions = ships.map((s: Ship) => s.getPositions());
+    const shipPositions: any = [];
+    this.mockedShipsOfPlayer.forEach((s: Ship) => s.getPositions().forEach(ss => shipPositions.push(ss)));
+    console.log("Player:", shipPositions);
+    
+    let board: any = [];
+
+    for (let i = 0; i < rowsTotal; i++) {
+      board.push([])
+      for (let j = 0; j < cellsInRowTotal; j++) {
+        board[i].push(new PlayerGameBoardPosition(i, j, this.isPosShip(shipPositions, i, j) ? TypeOfPlayerBoardElement.Ship : TypeOfPlayerBoardElement.Water));
+      }
+    }
+
+    return board;
+  }
+
+  updateOpponentBoard = () => {
+    console.log(this.opponentBoard[this.selectedPosition.getYPos()][this.selectedPosition.getXPos()]);
+    const x = this.selectedPosition.getXPos();
+    const y = this.selectedPosition.getYPos();
+    this.opponentBoard[x][y].setIsHit();
+  }
+
+  createOpponentBoard = (length = 10) => {
+    if (!this.mockedShipsOfPlayer) {
+      return;
+    }
+
+    const rowsTotal = length;
+    const cellsInRowTotal = length;
+
+    const shipPositions: any = [];
+    this.mockedShipsOfOpponent.forEach((s: Ship) => s.getPositions().forEach(ss => shipPositions.push(ss)));
+    console.log("Opponent's:", shipPositions);
+
+    let board: any = [];
+
+    for (let i = 0; i < rowsTotal; i++) {
+      board.push([])
+      for (let j = 0; j < cellsInRowTotal; j++) {
+        // const shipPos = ships.find();
+        console.log("O's:", i, j, this.isPosShip(shipPositions, i, j));
+
+        board[i].push(new OpponentGameBoardPosition(i, j, this.isPosShip(shipPositions, i, j), TypeOfOpponentBoardElement.Unknown));
+      }
+    }
+    console.log(board);
+
+    return board;
+  }
+
+
+
   
   playerShips = [];
   mockedShipsOfPlayer: any = [];
@@ -58,8 +126,8 @@ export class GameContainerPageComponent implements OnInit {
     this.mockedShipsOfPlayer.push(
       new Submarine(
         [
-          new ShipPosition(2, 0),
           new ShipPosition(3, 0),
+          new ShipPosition(4, 0),
         ]
       )
     )
@@ -97,7 +165,6 @@ export class GameContainerPageComponent implements OnInit {
       )
     )
     
-
 
     this.mockedShipsOfOpponent.push(
       new PatrolBoat(
@@ -149,6 +216,8 @@ export class GameContainerPageComponent implements OnInit {
       )
     )
     
+    this.playerBoard = this.createPlayerBoard();
+    this.opponentBoard = this.createOpponentBoard();
   }
 
 }

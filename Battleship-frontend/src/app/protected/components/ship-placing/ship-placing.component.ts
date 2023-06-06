@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-ship-placing',
@@ -6,5 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./ship-placing.component.css']
 })
 export class ShipPlacingComponent {
+  @Output() phaseClose: EventEmitter<any> = new EventEmitter();
+  setShips = () => {
+    this.phaseClose.emit(true);
+    // this.gameServive.setShips()
+  }
 
+  constructor() {
+  }
 }

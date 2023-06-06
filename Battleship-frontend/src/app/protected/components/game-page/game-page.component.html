@@ -1,7 +1,7 @@
 <!-- 3 opcio: game valasztas (LandingPage), ha osszejott a jatek, akkor hajp lerakas (ShipPlacing), es jatekterep (GameContainer) -->
 
-<app-landing-page></app-landing-page>
-<app-ship-placing></app-ship-placing>
-<game-container-page></game-container-page>
+<app-landing-page (phaseClose)="getOpponentPhaseClose($event)" *ngIf="isGameInitializationPhase"></app-landing-page>
+<app-ship-placing (phaseClose)="shipSetPhaseClose($event)" *ngIf="isShipSetPhase"></app-ship-placing>
+<game-container-page *ngIf="isGamePhase"></game-container-page>
 
 
