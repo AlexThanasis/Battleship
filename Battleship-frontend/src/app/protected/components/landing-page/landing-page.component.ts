@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { GameService } from '../../services/game.service';
+import { Router } from '@angular/router';
+// import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-landing-page',
@@ -13,5 +15,13 @@ export class LandingPageComponent {
     this.gameServive.getOppenent()
   }
 
-  constructor(private gameServive: GameService) {}
+  //npm i uuid
+  constructor(private gameServive: GameService, private router: Router) {}
+
+  createGame() {
+    // const uuid = uuidv4();
+    const uuid = 1;
+    console.log(uuid);
+    this.router.navigate(['/protected/game', uuid]);
+  }
 }

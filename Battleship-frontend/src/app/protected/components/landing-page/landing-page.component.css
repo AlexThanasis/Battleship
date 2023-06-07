@@ -1,0 +1,38 @@
+.landing-page-containe {
+    display: flex;
+}
+.upper-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30vh;
+}
+
+.title {
+    height: 30px;
+    color: grey;
+    font-size: 30px;
+}
+
+.middle-row {
+    display: flex;
+    justify-content: center;
+}
+
+.game-selection-sector {
+    width: 30vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+
+}
+
+.button {
+    margin: 20px;
+    width: 150px;
+    height: 30px;
+    color: grey;
+    font-size: 30px;
+
+}

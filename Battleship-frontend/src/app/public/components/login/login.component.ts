@@ -27,7 +27,8 @@ export class LoginComponent {
     }
     this.authService.login(this.loginForm.value).pipe(
       // route to protected/dashboard, if login was successfull
-      tap(() => this.router.navigate(['../../protected/components/game-page']))
+      tap(() => this.router.navigate(['protected/lobby'])),
+      // tap(() => console.log("TAP"))
     ).subscribe();
   }
 

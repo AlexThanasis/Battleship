@@ -1,5 +1,16 @@
-<div>
-    <h1>Welcome in the Battleship online game</h1>
-    <p>Get an oppenent player from the server</p>
-    <button (click)="getOpponent()">Get</button>
+<div class="landing-page-container">
+    <div class="upper-row">
+        <div class="title">
+            <h1>Welcome in the Battleship online game</h1>
+        </div>
+    </div>
+    
+    <div class="middle-row">
+        <div class="game-selection-sector">
+            <p>Get an oppenent player from the server</p>
+            <button (click)="createGame()">Create game </button>
+            <button (click)="getOpponent()">Get</button>
+        </div>
+
+    </div>
 </div>
