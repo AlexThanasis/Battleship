@@ -1,17 +1,16 @@
-<div class="display-board-player-ships">
+<div class="display-board-player-ships"  [ngClass]="[isPlayerTurn ? 'display-board-player-ships-active' : '']">
     <div class="diplay-title">Enemy fleet</div>
     <div>
         <div class="rows" *ngFor="let row of rows; index as i">
             <div 
-                (click)="fire($event)" 
+                (click)="isPlayerTurn && fire($event)" 
                 class="cell" 
                 [ngClass]="[handleBackground(cell.elementType)]" 
                 *ngFor="let cell of row; index as j" 
                 [attr.row-index]="i" 
-                [attr.cell-index]="j">
-            </div>
+                [attr.cell-index]="j"
+            ></div>
         </div>
     </div>
-
 </div>
 

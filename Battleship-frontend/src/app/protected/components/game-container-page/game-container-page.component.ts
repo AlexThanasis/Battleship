@@ -16,11 +16,42 @@ export class GameContainerPageComponent implements OnInit {
   opponent: Player | null = null;
   selectedPosition: any | Position;
 
+  isPlayerTurn: boolean = true;
+  isOpponentTurn: boolean = false;
+
   playerBoard: any = [];
   opponentBoard: any = [];
+
+  switchTurn = (): void => {
+    this.isPlayerTurn = !this.isPlayerTurn;
+    this.isOpponentTurn = !this.isOpponentTurn;
+
+    
+    this.isOpponentTurn && this.mockOpponentMove();
+  } 
+
+  mockOpponentMove = (): void => {
+    setTimeout(() => {
+      const x = Math.floor((Math.random() * 9) + 1);
+      const y = Math.floor((Math.random() * 9) + 1);
+
+      this.opponentFire(new Position(x, y), this.playerBoard);
+      this.switchTurn();
+    }, 3000); 
+  }
+
+  opponentFire = (position: Position, playerBoard: PlayerGameBoardPosition[][]): void => {
+    console.log("Fire on position: ", position);
+    
+    const firedAtPos = playerBoard[position.getXPos()][position.getYPos()]
+    firedAtPos && firedAtPos.setIsHit();
+    
+    console.log("Fire on position: ", firedAtPos, playerBoard);
+  }
     
   fireOnSelectedPosition(position: Position): void {
     console.log("Fire on position: ", position.getXPos(), position.getYPos());
+    this.switchTurn();
     this.selectedPosition = position;
     this.updateOpponentBoard();
   }
@@ -41,7 +72,7 @@ export class GameContainerPageComponent implements OnInit {
     // const shipPositions = ships.map((s: Ship) => s.getPositions());
     const shipPositions: any = [];
     this.mockedShipsOfPlayer.forEach((s: Ship) => s.getPositions().forEach(ss => shipPositions.push(ss)));
-    console.log("Player:", shipPositions);
+    // console.log("Player:", shipPositions);
     
     let board: any = [];
 
@@ -72,7 +103,7 @@ export class GameContainerPageComponent implements OnInit {
 
     const shipPositions: any = [];
     this.mockedShipsOfOpponent.forEach((s: Ship) => s.getPositions().forEach(ss => shipPositions.push(ss)));
-    console.log("Opponent's:", shipPositions);
+    // console.log("Opponent's:", shipPositions);
 
     let board: any = [];
 
@@ -80,7 +111,7 @@ export class GameContainerPageComponent implements OnInit {
       board.push([])
       for (let j = 0; j < cellsInRowTotal; j++) {
         // const shipPos = ships.find();
-        console.log("O's:", i, j, this.isPosShip(shipPositions, i, j));
+        // console.log("O's:", i, j, this.isPosShip(shipPositions, i, j));
 
         board[i].push(new OpponentGameBoardPosition(i, j, this.isPosShip(shipPositions, i, j), TypeOfOpponentBoardElement.Unknown));
       }

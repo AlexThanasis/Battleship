@@ -1,6 +1,12 @@
 .display-board-player-ships {
-    width: 350px;
-    height: 100%;
+    margin: 20px;
+    width: 320px;
+    /* height: 100%; */
+    border-radius: 20px;
+}
+
+.display-board-player-ships-active {
+    outline: 10px solid gold;
 }
 
 .display-title {
@@ -35,4 +41,12 @@
 
 .water {
     background-color: blue;
+}
+
+.hit {
+    background-color: red;
+}
+
+.missed {
+    background-color: white;
 }

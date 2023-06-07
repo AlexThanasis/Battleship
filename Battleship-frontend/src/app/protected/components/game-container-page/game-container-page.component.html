@@ -8,10 +8,10 @@
         </div>
         <div class="displays">
             <div class="display-container">
-                <player-ships-board [gameBoard]="playerBoard"></player-ships-board>
+                <player-ships-board [isOpponentTurn]="isOpponentTurn" [gameBoard]="playerBoard"></player-ships-board>
             </div>
             <div class="display-container">
-                <player-fire-board [gameBoard]="opponentBoard" (selectedPosition)="fireOnSelectedPosition($event)"></player-fire-board>
+                <player-fire-board [isPlayerTurn]="isPlayerTurn" [gameBoard]="opponentBoard" (selectedPosition)="fireOnSelectedPosition($event)"></player-fire-board>
             </div>
         </div>
     </div>

@@ -9,6 +9,7 @@ import { Ship } from 'src/app/protected/models/ship';
 })
 export class PlayerShipsBoardComponent {
   @Input() gameBoard = [];
+  @Input() isOpponentTurn: boolean = false;
   @Output() selectedPosition: EventEmitter<any> = new EventEmitter();
   rows: any = [];
   shipPositions: any = [];
@@ -34,10 +35,13 @@ export class PlayerShipsBoardComponent {
     if (elementType === 'hitship') {
       return 'hit';
     }
-    else if (elementType === 'unknown') {
-      return 'unknown'
-    }
     else if (elementType === 'hitempty') {
+      return 'missed'
+    }
+    else if (elementType === 'ship') {
+      return 'ship'
+    }
+    else if (elementType === 'water') {
       return 'water';
     } else {
       return '';

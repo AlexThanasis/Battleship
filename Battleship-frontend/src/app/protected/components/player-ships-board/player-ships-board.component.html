@@ -1,9 +1,14 @@
-<div class="display-board-player-ships">
+<div class="display-board-player-ships" [ngClass]="[isOpponentTurn ? 'display-board-player-ships-active' : '']">
     <div class="diplay-title">Player's ships</div>
     <div>
         <div class="rows" *ngFor="let row of gameBoard; index as i">
-            <div class="cell" [ngClass]="[cell.elementType === 'ship' ? 'ship': 'water']" *ngFor="let cell of row; index as j" [attr.row-index]="i" [attr.cell-index]="j">
-            </div>
+            <div 
+                class="cell"
+                [ngClass]="[handleBackground(cell.elementType)]"
+                *ngFor="let cell of row; index as j"
+                [attr.row-index]="i"
+                [attr.cell-index]="j"
+            ></div>
         </div>
     </div>
 </div>

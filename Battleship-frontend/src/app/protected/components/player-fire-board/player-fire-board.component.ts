@@ -9,6 +9,7 @@ import { Ship } from 'src/app/protected/models/ship';
 })
 export class PlayerFireBoardComponent {
   @Input() gameBoard = [];
+  @Input() isPlayerTurn: boolean = false;
   @Output() selectedPosition: EventEmitter<any> = new EventEmitter();
   rows: any = [];
   shipPositions: any = [];
