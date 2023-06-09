@@ -1,2 +1,20 @@
-<p>ship-placing works!</p>
+<div class="diplay-title">Welcome on board, {{username}}!</div>
+<div class="diplay-subtitle">Now, it is your turn to place your ships</div>
+<div>
+    <div class="rows" *ngFor="let row of rows; index as i">
+        <div 
+            class="cell" 
+            [ngClass]="[handleBackground(cell.elementType)]" 
+            *ngFor="let cell of row; index as j" 
+            [attr.row-index]="i" 
+            [attr.cell-index]="j"
+        ></div>
+    </div>
+    <div>
+        <div class="info">
+            
+        </div>
+    </div>
+</div>
+
 <button (click)="setShips()">Get</button>

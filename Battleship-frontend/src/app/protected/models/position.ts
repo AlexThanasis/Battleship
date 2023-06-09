@@ -58,6 +58,10 @@ export class PlayerGameBoardPosition extends Position {
             this.elementType = TypeOfPlayerBoardElement.HitEmpty;
         }
     }
+
+    public getElementType(): TypeOfPlayerBoardElement {
+        return this.elementType;
+    }
 }
 
 export class OpponentGameBoardPosition extends Position {
@@ -80,5 +84,9 @@ export class OpponentGameBoardPosition extends Position {
         } else {
             this.elementType = TypeOfOpponentBoardElement.HitEmpty;
         }
+    }
+
+    public getElementType(): TypeOfOpponentBoardElement {
+        return this.elementType;
     }
 }

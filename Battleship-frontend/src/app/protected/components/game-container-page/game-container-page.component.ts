@@ -5,6 +5,9 @@ import { Carrier, Battleship, Destroyer, Submarine, PatrolBoat, Ship } from "../
 import { TypeOfPlayerBoardElement, TypeOfOpponentBoardElement } from "../../models/TypeOfObject";
 import { Observable, map, catchError, tap } from 'rxjs';
 import { OpponentGameBoardPosition, PlayerGameBoardPosition, ShipPosition, Position } from 'src/app/protected/models/position';
+import { WebSocketService } from '../../services/websocket.service';
+import { ActivatedRoute } from '@angular/router';
+import { GameService } from '../../services/game.service';
 
 @Component({
   selector: 'game-container-page',
@@ -15,44 +18,59 @@ export class GameContainerPageComponent implements OnInit {
   player: Player | null = null;
   opponent: Player | null = null;
   selectedPosition: any | Position;
+  totalShips: number = 15;
 
-  isPlayerTurn: boolean = true;
-  isOpponentTurn: boolean = false;
+  gameId: number | null = 0;
+
+  isPlayerTurn: boolean = !this.gameService.joindToCreatedGame;
+  isOpponentTurn: boolean = this.gameService.joindToCreatedGame;
 
   playerBoard: any = [];
   opponentBoard: any = [];
 
+  constructor(private weSocketService: WebSocketService, private gameService: GameService, private route: ActivatedRoute) {}
+
   switchTurn = (): void => {
     this.isPlayerTurn = !this.isPlayerTurn;
     this.isOpponentTurn = !this.isOpponentTurn;
-
-    
-    this.isOpponentTurn && this.mockOpponentMove();
   } 
 
-  mockOpponentMove = (): void => {
-    setTimeout(() => {
-      const x = Math.floor((Math.random() * 9) + 1);
-      const y = Math.floor((Math.random() * 9) + 1);
+  // mockOpponentMove = (): void => {
+  //   setTimeout(() => {
+  //     const x = Math.floor((Math.random() * 9) + 1);
+  //     const y = Math.floor((Math.random() * 9) + 1);
 
-      this.opponentFire(new Position(x, y), this.playerBoard);
-      this.switchTurn();
-    }, 3000); 
+  //     this.opponentFire(new Position(x, y), this.playerBoard);
+  //     this.switchTurn();
+  //   }, 3000); 
+  // }
+
+  isEndOfGame = (): string => {
+    if (this.gameService.isWon) {
+      return "You have won the game!"
+    } else if (this.gameService.isLost) {
+      return "You have lost the game!"
+    } else {
+      return ''
+    }
   }
 
-  opponentFire = (position: Position, playerBoard: PlayerGameBoardPosition[][]): void => {
+  opponentFire = (position: Position, playerBoard: PlayerGameBoardPosition[][]): string => {
     console.log("Fire on position: ", position);
     
     const firedAtPos = playerBoard[position.getXPos()][position.getYPos()]
     firedAtPos && firedAtPos.setIsHit();
     
     console.log("Fire on position: ", firedAtPos, playerBoard);
+    this.switchTurn();
+    return firedAtPos.getElementType();
   }
     
   fireOnSelectedPosition(position: Position): void {
     console.log("Fire on position: ", position.getXPos(), position.getYPos());
     this.switchTurn();
     this.selectedPosition = position;
+    this.weSocketService.emit('game', `Fire x:${position.getXPos()}, y:${position.getYPos()}; p:${this.weSocketService.username}`)
     this.updateOpponentBoard();
   }
 
@@ -77,7 +95,7 @@ export class GameContainerPageComponent implements OnInit {
     let board: any = [];
 
     for (let i = 0; i < rowsTotal; i++) {
-      board.push([])
+      board.push([]);
       for (let j = 0; j < cellsInRowTotal; j++) {
         board[i].push(new PlayerGameBoardPosition(i, j, this.isPosShip(shipPositions, i, j) ? TypeOfPlayerBoardElement.Ship : TypeOfPlayerBoardElement.Water));
       }
@@ -91,6 +109,19 @@ export class GameContainerPageComponent implements OnInit {
     const x = this.selectedPosition.getXPos();
     const y = this.selectedPosition.getYPos();
     this.opponentBoard[x][y].setIsHit();
+  }
+
+  getHits = (): number => {
+    if (!this.playerBoard || this.playerBoard?.length === 0) {
+      return 0;
+    }
+    let hitShips = 0;
+    this.opponentBoard.forEach((row: any) => {
+      console.log("row ", row)
+      hitShips += row.filter((el: any) => el.getElementType() === TypeOfOpponentBoardElement.HitShip).length;
+    });
+
+    return hitShips;
   }
 
   createOpponentBoard = (length = 10) => {
@@ -110,9 +141,6 @@ export class GameContainerPageComponent implements OnInit {
     for (let i = 0; i < rowsTotal; i++) {
       board.push([])
       for (let j = 0; j < cellsInRowTotal; j++) {
-        // const shipPos = ships.find();
-        // console.log("O's:", i, j, this.isPosShip(shipPositions, i, j));
-
         board[i].push(new OpponentGameBoardPosition(i, j, this.isPosShip(shipPositions, i, j), TypeOfOpponentBoardElement.Unknown));
       }
     }
@@ -121,30 +149,54 @@ export class GameContainerPageComponent implements OnInit {
     return board;
   }
 
+  getShipsPoint = (): number => {
+    if (!this.playerBoard || this.playerBoard?.length === 0) {
+      return -1;
+    }
+    let ships: number = -1;
+    // let hitShips: number = 1;
+    this.playerBoard.forEach((row: any) => {
+      // hitShips += row.filter((el: any) => el.getElementType() === TypeOfPlayerBoardElement.HitShip).length;
+      ships += row.filter((el: any) => el.getElementType() === TypeOfPlayerBoardElement.Ship).length;
+    });
 
+    return ships; 
+  }
 
-  
   playerShips = [];
   mockedShipsOfPlayer: any = [];
   mockedShipsOfOpponent: any = [];
-  // availablePlayers = [];
-
-  // constructor(private service: ApiServiceService) {}
-  constructor() {
-    // this.service.connect();
-    }
 
   ngOnInit(): void {
-    //throw new Error('Method not implemented.');
-    /*this.service.getAvailablePlayers().subscribe(
-      data => {
-        this.availablePlayers.push(data);
+    this.gameId = Number(this.route.snapshot.paramMap.get('id'));
+    // this.weSocketService.listen(`game ${this.gameId}`, ).subscribe((data: any) => {
+    this.weSocketService.listen(`game`).subscribe((data: any) => {
+      if (!this.opponent) {
+        this.opponent = new Player(data.slice(12));
+        console.log(this.opponent.getName());
+        this.weSocketService.emit('game', `Hello, I am your opponent, ${this.player?.getName()}`);
       }
-    )*/
 
+      if(data.startsWith('Hello, I am your opponent')) {
+        this.opponent = new Player(data.slice(12));
+        console.log(this.opponent.getName());
+      }
+
+      if (data.startsWith('Fire') && this.opponent && this.isOpponentTurn && data.split("p:")[1] !== this.player?.getName()) {
+        const x = data.substring(data.indexOf('x:') + 2, data.indexOf(','));
+        const y = data.substring(data.indexOf('y:') + 2, data.indexOf(';'));
+        console.log("X: ", x)
+        console.log("Y: ", y)
+        console.log("P: ", data.split("p:")[1])
+        const typeOfPos = this.opponentFire(new Position(+x, +y), this.playerBoard);
+        this.weSocketService.emit('game', `Answer, ${typeOfPos}`);
+      }
+
+      console.log(data);
+    });
     
-    this.player = new Player("A player");
-    this.opponent = new Player("B player");
+    this.player = new Player(this.weSocketService.username ?? 'Player');
+    this.weSocketService.emit('game', `Hello, I am ${this.player?.getName()}`);
     
     this.mockedShipsOfPlayer.push(
       new PatrolBoat(

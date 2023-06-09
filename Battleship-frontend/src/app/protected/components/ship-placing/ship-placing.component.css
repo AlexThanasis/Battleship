@@ -1,0 +1,63 @@
+.display-board-player-ships {
+    margin: 20px;
+    width: 320px;
+    /* height: 100%; */
+    border-radius: 20px;
+}
+
+.display-board-player-ships-active {
+    outline: 10px solid gold;
+}
+
+.display-title {
+    min-width: 200px;
+    height: 16px;
+    padding: 8px;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.diplay-subtitle {
+    min-width: 200px;
+    height: 16px;
+    padding: 8px;
+    font-size: 16px;
+}
+
+.cell {
+    background-color: white;
+    min-width: 30px;
+    min-height: 30px;
+    border: 1px solid whitesmoke;
+    cursor: crosshair;
+    border-radius: 4px;
+}
+
+.cell-inner {
+    
+}
+
+.rows {
+    display: flex;
+}
+
+.table {
+    width: 300px;
+}
+
+/* .hit {
+    background-color: red;
+} */
+
+.water {
+    background-color: blue;
+}
+
+.ship {
+    background-color: grey;
+}
+
+/* 
+.unknown {
+    background-color: grey;
+} */

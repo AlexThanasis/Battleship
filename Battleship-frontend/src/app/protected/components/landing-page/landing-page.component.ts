@@ -10,18 +10,24 @@ import { Router } from '@angular/router';
 })
 export class LandingPageComponent {
   @Output() phaseClose: EventEmitter<any> = new EventEmitter();
-  getOpponent = () => {
-    this.phaseClose.emit(true);
-    this.gameServive.getOppenent()
-  }
-
+  
   //npm i uuid
   constructor(private gameServive: GameService, private router: Router) {}
-
+  
   createGame() {
     // const uuid = uuidv4();
+    this.phaseClose.emit(true);
     const uuid = 1;
     console.log(uuid);
     this.router.navigate(['/protected/game', uuid]);
+    this.gameServive.createGame();
+  }
+
+  getOpponent = () => {
+    this.phaseClose.emit(true);
+    const uuid = 1;
+    console.log(uuid);
+    this.router.navigate(['/protected/game', uuid]);
+    this.gameServive.getOppenent();
   }
 }

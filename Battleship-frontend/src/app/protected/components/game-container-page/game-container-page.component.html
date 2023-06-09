@@ -1,6 +1,7 @@
 <div class="game-container">
     <div class="upper-row">
-        <p>Torpedo Game</p>
+        <p>Torpedo Game, Player: {{player?.getName()}}, remaining ships: {{getShipsPoint()}} score: {{getHits()}}</p>
+        <div>{{isEndOfGame()}}</div>
     </div>
     <div class="middle-row">
         <div class="display-head-title">

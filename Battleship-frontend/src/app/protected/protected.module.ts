@@ -8,6 +8,9 @@ import { PlayerShipsBoardComponent } from './components/player-ships-board/playe
 import { PlayerFireBoardComponent } from './components/player-fire-board/player-fire-board.component';
 import { ShipPlacingComponent } from './components/ship-placing/ship-placing.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 @NgModule({
@@ -17,12 +20,15 @@ import { LandingPageComponent } from './components/landing-page/landing-page.com
     PlayerShipsBoardComponent,
     PlayerFireBoardComponent,
     ShipPlacingComponent,
-    LandingPageComponent
+    LandingPageComponent,
   ],
   imports: [
     CommonModule,
     ProtectedRoutingModule,
     MatButtonModule,
+    FormsModule,
+    MatInputModule,
+    MatFormFieldModule,
   ]
 })
 export class ProtectedModule { }

@@ -1,5 +1,31 @@
 <!-- 3 opcio: game valasztas (LandingPage), ha osszejott a jatek, akkor hajp lerakas (ShipPlacing), es jatekterep (GameContainer) -->
 
 <!-- <app-landing-page (phaseClose)="getOpponentPhaseClose($event)" *ngIf="isGameInitializationPhase"></app-landing-page> -->
-<app-ship-placing (phaseClose)="shipSetPhaseClose($event)" *ngIf="isShipSetPhase"></app-ship-placing>
-<game-container-page *ngIf="isGamePhase"></game-container-page>
+
+
+<!-- <div>
+    <h1>Real-time Chat</h1>
+    <div *ngIf="messages.length > 0">
+        <ul>
+            <li *ngFor="let message of messages">{{ message }}</li>
+        </ul>
+    </div>
+    <input type="text" [(ngModel)]="newMessage" placeholder="Type a message..." />
+    <button (click)="sendMessage()">Send</button>
+</div> -->
+<br />
+<div class="create-game-container">
+    <div  *ngIf="isGameNamingPhase" class="new-game-middle-row">
+        <div>
+
+            <span>Type your name for the game</span>
+            <input class="name-input" type="text" [(ngModel)]="username" placeholder="Type your name" />
+        </div>
+        <div class="button-container">
+            <button class="button" (click)="getUsername()">Save</button>
+        </div>
+    </div>
+        
+    <app-ship-placing (phaseClose)="shipSetPhaseClose($event)" *ngIf="isShipSetPhase" [username]="username"></app-ship-placing>
+    <game-container-page *ngIf="isGamePhase"></game-container-page>
+</div>
